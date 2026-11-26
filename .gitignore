@@ -1,0 +1,13 @@
+.env
+.env.*
+*.key
+*.pem
+data/raw/
+data/interim/
+data/processed/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+mlruns/
