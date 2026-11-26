@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 import os
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
@@ -7,9 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import joblib
 import numpy as np
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
+from src.preprocessing.text_preprocessing import preprocess_text
 
 
-MODEL_PATH = os.getenv("MODEL_PATH", "models/pipeline.joblib")
+BACKEND_DIR = Path(__file__).resolve().parent
+load_dotenv(BACKEND_DIR / ".env")
+MODEL_PATH = Path(os.getenv("MODEL_PATH", str(BACKEND_DIR.parent / "models" / "baseline_model.joblib")))
 
 DEPARTMENT_MAP: dict[str, str] = {
     "business": "Finance & Corporate Strategy",
@@ -20,6 +25,10 @@ DEPARTMENT_MAP: dict[str, str] = {
 }
 
 DEFAULT_DEPARTMENT = "General Operations & Triage"
+
+
+def get_routing_department(label: str) -> str:
+    return DEPARTMENT_MAP.get(label.strip().lower(), DEFAULT_DEPARTMENT)
 
 
 class ClassifyRequest(BaseModel):
@@ -68,7 +77,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-raw_origins = os.getenv("ALLOWED_ORIGINS", "*")
+raw_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5500,http://127.0.0.1:5500",
+)
 allow_origins = (
     ["*"]
     if raw_origins.strip() == "*"
@@ -101,15 +113,14 @@ def classify_document(payload: ClassifyRequest) -> ClassifyResponse:
         raise HTTPException(status_code=503, detail="Classification model is not loaded.")
 
     try:
-        predicted_label = str(pipeline.predict([cleaned_text])[0])
-        confidence = compute_confidence(pipeline, cleaned_text)
+        processed_text = preprocess_text(cleaned_text)
+        predicted_label = str(pipeline.predict([processed_text])[0])
+        confidence = compute_confidence(pipeline, processed_text)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Inference error: {exc}") from exc
-
-    department = DEPARTMENT_MAP.get(predicted_label.strip().lower(), DEFAULT_DEPARTMENT)
 
     return ClassifyResponse(
         label=predicted_label,
         confidence=round(confidence, 4),
-        suggestion=department,
+        suggestion=get_routing_department(predicted_label),
     )

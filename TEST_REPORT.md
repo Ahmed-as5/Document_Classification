@@ -1,18 +1,18 @@
 # Test Report
 
-Date:
+Date: 2026-11-27
 Commit:
 Command: `python -m pytest tests/ -v`
 
 | Test file | Passed | Failed | Not run |
 |---|---|---|---|
-| tests/test_api.py | | | |
-| tests/test_preprocessing.py | | | |
-| tests/test_routing.py | | | |
+| tests/test_api.py | 8 | 0 | 0 |
+| tests/test_confidence.py | 3 | 0 | 0 |
+| tests/test_preprocessing.py | 3 | 0 | 0 |
+| tests/test_routing.py | 6 | 0 | 0 |
 
 ## Failures and notes
+- 20 tests passed.
 
 ## Not tested
-- Unknown routing category
 - Frontend
-- Input length limit

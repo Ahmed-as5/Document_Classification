@@ -18,6 +18,7 @@ frontend/
 ├── css/
 │   └── style.css
 ├── js/
+│   ├── config.js
 │   ├── api.js
 │   └── app.js
 └── README.md
@@ -25,11 +26,11 @@ frontend/
 
 ### 3. Set the backend address
 
-Open `js/api.js` and set the backend URL. You can keep this file unchanged during local
-development if you serve the API from the same origin.
+Set the backend URL in `js/config.js`. The default points to the local API at
+`http://127.0.0.1:8000`.
 
 ```javascript
-const API_BASE_URL = "https://api.your-domain.com";
+window.APP_CONFIG = Object.freeze({ API_BASE_URL: "https://api.your-domain.com" });
 ```
 
 ### 4. Start the frontend
@@ -59,6 +60,6 @@ Then open the address shown in the terminal in your browser.
 
 | Problem | Fix |
 |---------|-----|
-| "Unable to reach the server" | Make sure the backend is running and `API_BASE_URL` in `js/api.js` is correct. |
+| "Unable to reach the server" | Make sure the backend is running and `API_BASE_URL` in `js/config.js` is correct. |
 | CORS error in the browser console | Allow the frontend's origin in the backend's CORS settings. |
 | Page looks unstyled or buttons do nothing | Check that the folder structure matches the one above. |

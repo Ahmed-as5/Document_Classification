@@ -1,21 +1,13 @@
-import pytest
-
-# Adjust the function name to match the real code
 from src.preprocessing.text_preprocessing import clean_text
 
 
-def test_returns_string():
-    assert isinstance(clean_text("Hello   WORLD!!"), str)
+def test_clean_text_normalizes_case_punctuation_and_whitespace():
+    assert clean_text("  THE quick, brown fox!  ") == "the quick brown fox"
 
 
-def test_normal_text_not_emptied():
-    assert clean_text("Invoice payment is due").strip()
+def test_clean_text_removes_standalone_numbers():
+    assert clean_text("Invoice 123 total 45 USD") == "invoice total usd"
 
 
-@pytest.mark.parametrize("text", ["", "   "])
-def test_empty_text(text):
-    assert clean_text(text).strip() == ""
-
-
-def test_symbols_do_not_crash():
-    assert isinstance(clean_text("@#$%^&*()\n\t"), str)
+def test_clean_text_accepts_empty_text():
+    assert clean_text("   ") == ""

@@ -1,11 +1,16 @@
 .env
 .env.*
+!.env.example
+!**/.env.example
 *.key
 *.pem
 data/raw/
 data/interim/
 data/processed/
+models/*.joblib
+models/*.pkl
 __pycache__/
+*.py[cod]
 .pytest_cache/
 .ipynb_checkpoints/
 .venv/
