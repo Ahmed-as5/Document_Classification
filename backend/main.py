@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import logging
 import os
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,7 @@ from dotenv import load_dotenv
 from src.preprocessing.text_preprocessing import preprocess_text
 
 
+logger = logging.getLogger(__name__)
 BACKEND_DIR = Path(__file__).resolve().parent
 load_dotenv(BACKEND_DIR / ".env")
 MODEL_PATH = Path(os.getenv("MODEL_PATH", str(BACKEND_DIR.parent / "models" / "baseline_model.joblib")))
@@ -116,8 +118,9 @@ def classify_document(payload: ClassifyRequest) -> ClassifyResponse:
         processed_text = preprocess_text(cleaned_text)
         predicted_label = str(pipeline.predict([processed_text])[0])
         confidence = compute_confidence(pipeline, processed_text)
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Inference error: {exc}") from exc
+    except Exception:
+        logger.exception("Document classification inference failed")
+        raise HTTPException(status_code=500, detail="Classification failed.") from None
 
     return ClassifyResponse(
         label=predicted_label,

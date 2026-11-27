@@ -11,15 +11,20 @@ from nltk import pos_tag
 @lru_cache(maxsize=1)
 def _load_nltk_resources():
     resources = (
-        'punkt_tab',
-        'stopwords',
-        'wordnet',
-        'omw-1.4',
-        'averaged_perceptron_tagger_eng',
+        ('punkt_tab', 'tokenizers/punkt_tab/english/'),
+        ('stopwords', 'corpora/stopwords'),
+        ('wordnet', 'corpora/wordnet'),
+        ('omw-1.4', 'corpora/omw-1.4'),
+        ('averaged_perceptron_tagger_eng', 'taggers/averaged_perceptron_tagger_eng/'),
     )
-    for resource in resources:
-        if not nltk.download(resource, quiet=True):
-            raise RuntimeError(f"Unable to download required NLTK resource: {resource}")
+    for package, path in resources:
+        try:
+            nltk.data.find(path)
+        except LookupError as exc:
+            raise RuntimeError(
+                f"Required NLTK resource '{package}' is missing. "
+                "Provision it from a trusted source before running the application."
+            ) from exc
 
     words = set(stopwords.words('english'))
     words.difference_update({'no', 'nor', 'not'})

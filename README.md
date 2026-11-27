@@ -2,6 +2,10 @@
 
 Classifies BBC news articles into Business, Entertainment, Politics, Sport, or Tech and recommends a department.
 
+## Demo
+
+[Watch the application demo](./WhatsApp%20Video%202026-11-27%20at%204.20.55%20AM.mp4).
+
 ## Project Structure
 
 ```text
@@ -48,6 +52,11 @@ Install the development and test dependencies:
 ```bash
 pip install -r requirements-dev.txt
 ```
+
+Provision the required NLTK data packages (`punkt_tab`, `stopwords`, `wordnet`,
+`omw-1.4`, and `averaged_perceptron_tagger_eng`) from a trusted source before
+training or serving. Runtime requests do not download NLTK resources. Set
+`NLTK_DATA` to the provisioned data directory if it is outside NLTK's default paths.
 
 ## Train the model
 

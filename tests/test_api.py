@@ -45,6 +45,19 @@ def test_classifies_text_and_returns_department(client):
     assert client.app.state.pipeline.confidence_text == f"processed: {text}"
 
 
+def test_inference_errors_return_generic_detail(client):
+    def fail_prediction(_):
+        raise RuntimeError("internal model path")
+
+    client.app.state.pipeline.predict = fail_prediction
+
+    response = client.post("/classify", json={"text": "test"})
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Classification failed."}
+    assert "internal model path" not in response.text
+
+
 @pytest.mark.parametrize(
     "payload",
     [{}, {"text": ""}, {"text": "   "}, {"text": None}, {"text": 123}, {"text": "x" * 250_001}],
