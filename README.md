@@ -4,7 +4,7 @@ Classifies BBC news articles into Business, Entertainment, Politics, Sport, or T
 
 ## Demo
 
-[Watch the application demo](./WhatsApp%20Video%202026-11-27%20at%204.20.55%20AM.mp4)
+[Watch the application demo](./WhatsApp%20Video%202026-11-27%20at%204.20.55%20AM.mp4).
 
 ## Project Structure
 
