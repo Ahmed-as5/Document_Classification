@@ -1,4 +1,4 @@
-# DocClassifier – Frontend
+# NewsGlass – Frontend
 
 ## How to Run
 
@@ -52,9 +52,9 @@ Then open the address shown in the terminal in your browser.
 
 ### 5. Use the app
 
-1. Paste your text in the box, or click **Upload file** (`.txt`, `.json`, `.md`, `.csv`).
-2. Click **Classify document** (or press `Ctrl + Enter`).
-3. The predicted category, confidence and suggested department will appear below.
+1. Paste a BBC news article in the box, or click **Upload file** (`.txt`, `.json`, `.md`, `.csv`).
+2. Click **Classify article** (or press `Ctrl + Enter`).
+3. The predicted category (Business, Entertainment, Politics, Sport, or Tech), confidence and suggested team will appear below.
 
 ### Troubleshooting
 
@@ -63,3 +63,19 @@ Then open the address shown in the terminal in your browser.
 | "Unable to reach the server" | Make sure the backend is running and `API_BASE_URL` in `js/config.js` is correct. |
 | CORS error in the browser console | Allow the frontend's origin in the backend's CORS settings. |
 | Page looks unstyled or buttons do nothing | Check that the folder structure matches the one above. |
+
+## Publish on GitHub Pages
+
+The repository deploys the static frontend from `main` using the
+`.github/workflows/deploy-frontend.yml` workflow. Enable GitHub Pages in the
+repository settings with **Build and deployment → Source → GitHub Actions**.
+The public page will be available at:
+
+`https://ahmed-as5.github.io/Document_Classification/`
+
+By default, the published page is a static preview and classification is disabled.
+To connect a public API later, add a repository Actions variable named
+`PUBLIC_API_BASE_URL` containing the API's HTTPS base URL, then rerun the deploy
+workflow. Configure that API's CORS policy to allow
+`https://ahmed-as5.github.io`. Do not put credentials in the frontend or this
+variable.

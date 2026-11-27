@@ -1,8 +1,12 @@
 
-const API_BASE_URL = "https://api.your-domain.com"; 
+const LOCAL_API_BASE_URL = "http://127.0.0.1:8000";
+const configuredApiBaseUrl =
+    window.APP_CONFIG && typeof window.APP_CONFIG.API_BASE_URL === "string"
+        ? window.APP_CONFIG.API_BASE_URL.trim()
+        : LOCAL_API_BASE_URL;
 
 const API_CONFIG = Object.freeze({
-    BASE_URL: (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) || API_BASE_URL,
+    BASE_URL: configuredApiBaseUrl,
     ENDPOINTS: Object.freeze({
         CLASSIFY: "/classify",
     }),
@@ -29,6 +33,10 @@ function buildUrl(path) {
  * @returns {Promise<Response>}
  */
 async function apiClassifyDocument(text) {
+    if (!API_CONFIG.BASE_URL) {
+        throw new Error("The public classification API has not been configured yet.");
+    }
+
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT_MS);
 
