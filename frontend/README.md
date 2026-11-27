@@ -69,6 +69,8 @@ Then open the address shown in the terminal in your browser.
 The repository deploys the static frontend from `main` using the
 `.github/workflows/deploy-frontend.yml` workflow. Enable GitHub Pages in the
 repository settings with **Build and deployment → Source → GitHub Actions**.
+After enabling Pages, push to `main` or run **Deploy frontend to GitHub Pages**
+from the repository's Actions tab to publish.
 The public page will be available at:
 
 `https://ahmed-as5.github.io/Document_Classification/`
